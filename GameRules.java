@@ -189,17 +189,6 @@ public class GameRules
         
         return legal;        
     }
-
-    public boolean aiIsLegalMove(int a, int b){
-        boolean legal = false;
-        int numOfDestinations = legalMoves[a].length; // number of possible legal destinations can vary between 3 and 4.
-        for (int i = 0; i < numOfDestinations; i++) {
-            if (legalMoves[a][i] == b) {
-                legal = true;
-            }
-        }
-        return legal;
-    }
     
     /**
      * Returns true of the tiger at tigerLoc (location) can eat any goat

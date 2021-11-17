@@ -137,18 +137,6 @@ public class GameViewer implements MouseListener
         drawBoard();
     }
 
-    public boolean aiGoatPlacementLoc(int x, int y) {
-        boolean hit = false;
-        int rx = 5;
-        int ry = 5;
-        int rx2 = bkSize / 2;
-        int ry2 = bkSize / 3;
-        if (x >= rx && x <= rx2 && y >= ry && y <= ry2) {
-            hit = true;
-        }
-        return hit;
-    }
-
     /**
      * Used to get the location of the restart button for a click.
      */
