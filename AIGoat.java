@@ -2,39 +2,35 @@ import java.util.*;
 import java.lang.Thread;
 public class AIGoat {
     public static void main(String[] args) {
+
     }
 
-    private GameViewer gv;
-    private Random rn;
-    private Board bd;
-    private GameRules rules;
     Random rd;
+    Board bd;
+    GameViewer gv;
+    GameRules rules;
 
-    public AIGoat(){
-        gv = new GameViewer();
-        rn = new Random();
-        bd = new Board();
-        rules = new GameRules();
+    public AIGoat(Board board, GameViewer viewer, GameRules rules){
         rd = new Random();
+        bd = board;
+        gv = viewer;
+        this.rules = rules;
     }
 
     public void aiPlaceGoat(){
-        for(int i = 0; i < 13; i++){
-            int x = rn.nextInt(24);
-            while(bd.isVacant(x) == false){
-                x = rn.nextInt(24);
+        int numGoats = rules.getNumGoats();
+        for(int i = 0; i < 12 - numGoats; i++){
+            int x = rd.nextInt(24);
+            while (bd.isVacant(x) == false) {
+                x = rd.nextInt(24);
             }
-            gv.goatAI(x);
-            bd.setGoat(x);
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                System.out.println(e);
+            gv.placeGoat(x);
+            if (rules.isGoatsTurn() == false) {
+                gv.placeTiger();
             }
         }
-        aiGamePlay();
     }
-
+/*
     public void aiMoveGoat(){
         try {
             Thread.sleep(300);
@@ -57,8 +53,9 @@ public class AIGoat {
     }
 
     public void aiGamePlay(){
-        while(bd.tigersWin() == false){
+        while(rules.moveCount() <= 100){
             aiMoveGoat();
         }
     }
+*/
 }

@@ -18,7 +18,7 @@ import java.util.*;
 public class AIplayer
 {
     public static void main(String[] args) {
-        
+
     }
     private Random rn; // for random tiger or location selection
     private GameRules rul; // an instance of GameRules to check for legal moves

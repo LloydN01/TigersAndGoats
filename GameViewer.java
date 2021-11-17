@@ -11,8 +11,7 @@
  */
 
 import java.awt.*;
-import java.awt.event.*; 
-import javax.swing.SwingUtilities;
+import java.awt.event.*;
 
 public class GameViewer implements MouseListener
 {
@@ -26,6 +25,7 @@ public class GameViewer implements MouseListener
     private GameRules rules; // an object of GameRules
     private Board bd; // an object of Board
     private AIplayer ai; //an object of AIplayer
+    private AIGoat aiGoat;
     
     // 2D coordinates of valid locations on the board in steps of block size                                  
     public static final int[][] locs = {{1,1},                  {4,1},                  {7,1},
@@ -51,14 +51,15 @@ public class GameViewer implements MouseListener
      * Draws the board.
      */
     public GameViewer(int bkSize)
-    {        
+    {
         this.bkSize = bkSize;
         brdSize = bkSize*8;
         sc = new SimpleCanvas("Tigers and Goats", brdSize, brdSize, Color.BLUE);
         sc.addMouseListener(this);           
         rules = new GameRules();
         bd = new Board();
-        ai = new AIplayer();              
+        ai = new AIplayer();
+        aiGoat = new AIGoat(bd, this, rules); //AI goat initialisation.          
         drawBoard();               
     }
     
@@ -106,7 +107,13 @@ public class GameViewer implements MouseListener
         
         //EXTRA FEATURE: Draws Restart 'button'.
         sc.drawRectangle(5, 5, bkSize, bkSize/3, Color.WHITE);
-        sc.drawString("Restart", bkSize / 4, bkSize / 4, Color.BLACK);   
+        sc.drawString("Restart", bkSize / 4, bkSize / 4, Color.BLACK);
+
+        //EXTRA FEATURE: Draws Randomise 'button'
+        if(rules.isMoveStage() == false){
+            sc.drawRectangle(5, 10 + bkSize / 3, bkSize, 10 + 2 * (bkSize / 3), Color.WHITE);
+            sc.drawString("Random", bkSize / 4, 10 + bkSize / 3 + bkSize / 4, Color.BLACK);
+        }
         
         // TODO 10 
         // Draw the goats and tigers. (Drawing the shadows is not compulsory)
@@ -147,6 +154,21 @@ public class GameViewer implements MouseListener
         int rx2 = bkSize;
         int ry2 = bkSize/3;
         if(x >= rx && x <= rx2 && y >= ry && y <= ry2){ //Checks if click is within the x & y boundaries of the button.
+            hit = true;
+        }
+        return hit;
+    }
+
+    /**
+     * Used to get the location of the random Goat Placement button.
+     */
+    public boolean randomButton(int x, int y){
+        boolean hit = false;
+        int rx = 5;
+        int ry = 10 + bkSize / 3;
+        int rx2 = bkSize;
+        int ry2 = 10 + 2 * (bkSize / 3);
+        if (x >= rx && x <= rx2 && y >= ry && y <= ry2) { // Checks if click is within the x & y boundaries of the button.
             hit = true;
         }
         return hit;
@@ -220,12 +242,6 @@ public class GameViewer implements MouseListener
             }
         }
     }
-
-    public void aiGoatMove(int a, int b){
-        mov[0] = a;
-        mov[1] = b;
-        moveGoat();
-    }
     
     /**
      * Make the user selected goat move only if legal otherwise set the destination to -1 (invalid).
@@ -276,17 +292,6 @@ public class GameViewer implements MouseListener
         
     }
 
-    public void goatAI(int loc){
-        if(rules.isMoveStage() == false){
-            if(rules.isGoatsTurn()){
-                placeGoat(loc);
-                if(rules.isGoatsTurn() == false){
-                    placeTiger();
-                }
-            }
-        }
-    }
-
     public void illegalMove(){
         sc.drawString("Illegal Move", brdSize / 2 - bkSize / 2, (brdSize / 2) + 20, Color.WHITE);
     }
@@ -322,6 +327,14 @@ public class GameViewer implements MouseListener
         
         if(restartLocation(x, y)){
             restart();
+        }
+
+        if(rules.isMoveStage() == false){
+            if(randomButton(x, y)){
+                if(rules.isGoatsTurn()){
+                    aiGoat.aiPlaceGoat();
+                }
+            }
         }
     }
     

@@ -105,17 +105,4 @@ public class Board
         board[a] = bPiece;
         board[b] = aPiece;
     }
-
-    public boolean tigersWin(){
-        int numGoats = 0;
-        for(Piece p: board){
-            if(p == Piece.GOAT){
-                numGoats++;
-            }
-        }
-        if(numGoats <= 6){
-            return true;
-        }
-        return false;
-    }
 }
