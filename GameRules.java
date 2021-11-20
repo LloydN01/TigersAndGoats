@@ -158,7 +158,7 @@ public class GameRules
         for(int i = 0; i < 24; i++){
             int x2 = GameViewer.locs[i][0] * bkSize;
             int y2 = GameViewer.locs[i][1] * bkSize;
-            if(Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2)) <= 30){
+            if(Math.sqrt(Math.pow((x1 - x2), 2) + Math.pow((y1 - y2), 2)) <= 20){
                 if(smallest > Math.sqrt(Math.pow((x1 - x2), 2) 
                 + Math.pow((y1 - y2), 2))){
                     smallest = Math.sqrt(Math.pow((x1 - x2),2) 

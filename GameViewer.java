@@ -25,7 +25,7 @@ public class GameViewer implements MouseListener
     private GameRules rules; // an object of GameRules
     private Board bd; // an object of Board
     private AIplayer ai; //an object of AIplayer
-    private AIGoat aiGoat;
+    private AIGoat aiGoat; //an object of AIGoat
     
     // 2D coordinates of valid locations on the board in steps of block size                                  
     public static final int[][] locs = {{1,1},                  {4,1},                  {7,1},
@@ -59,7 +59,7 @@ public class GameViewer implements MouseListener
         rules = new GameRules();
         bd = new Board();
         ai = new AIplayer();
-        aiGoat = new AIGoat(bd, this, rules); //AI goat initialisation.          
+        aiGoat = new AIGoat(); //AI goat initialisation.          
         drawBoard();               
     }
     
@@ -332,7 +332,13 @@ public class GameViewer implements MouseListener
         if(rules.isMoveStage() == false){
             if(randomButton(x, y)){
                 if(rules.isGoatsTurn()){
-                    aiGoat.aiPlaceGoat();
+                    int numGoats = rules.getNumGoats();
+                    for(int i = 0; i < 12 - numGoats; i++){
+                        placeGoat(aiGoat.aiPlaceGoat(bd));
+                        if (rules.isGoatsTurn() == false) {
+                            placeTiger();
+                        }
+                    }
                 }
             }
         }
